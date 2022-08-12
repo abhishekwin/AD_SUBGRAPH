@@ -1,0 +1,43 @@
+specVersion: 0.0.4
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: NFTLaunchPad
+    network: chapel
+    source:
+      address: "0xE85d5FBEA38c738263dA2fC45ebaa838E2428934"
+      abi: NFTLaunchPad
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - LaunchPadCreated
+      abis:
+        - name: NFTLaunchPad
+          file: ./abis/NFTLaunchPad.json
+      eventHandlers:
+        - event: CreateLaunchpad(address,address,uint256,string,string)
+          handler: handleCreateLaunchpad
+      file: ./src/nft-launch-pad.ts
+templates:      
+  - kind: ethereum/contract
+    name: NFTCollectiontemplate
+    network: chapel
+    source:
+      abi: CollectionCreated
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/collection.ts
+      entities:
+        - NftTransfer
+        - Collection
+      abis:
+        - name: CollectionCreated
+          file: ./abis/CollectionCreated.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer

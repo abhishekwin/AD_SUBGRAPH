@@ -1,0 +1,34 @@
+type LaunchPadCreated @entity {
+  id: ID!
+  collection: Bytes! # address
+  creator: Bytes # address
+  creationTime: BigInt
+  TransactionHash: Bytes # address
+  BlockNumber: BigInt #BlockNumber
+  Name: String 
+  Symbol: String
+  timestamp: BigInt # time
+  tokens: [Token!] @derivedFrom(field: "collection")
+}
+
+type Token @entity {
+  id: ID!
+  collection_address: Bytes # address
+  tokenId: BigInt! # token
+  timestamp: BigInt # time
+  collection: LaunchPadCreated!
+  transfers: [NftTransfer!] @derivedFrom(field: "token")
+}
+
+
+type NftTransfer @entity {
+  id: ID!
+  token: Token!
+  collection: LaunchPadCreated!
+  from: Bytes! #address
+  to: Bytes! # address
+  collection_address: Bytes! # address
+  tokenId: BigInt! # token
+  timestamp: BigInt # time
+}
+
